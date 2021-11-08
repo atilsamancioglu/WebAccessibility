@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <style>
+
+        #navbar {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #EEEEEE;
+        }
+
+        ul#navbar li {
+            float:left;
+        }
+
+        ul#navbar li a {
+            display: block;
+            color: #000000;
+            font-weight:bold;
+            padding: 8px 16px;
+            text-decoration: none;
+        }
+
+
+        ul#navbar li a:hover {
+            background-color: orange;
+            color: white;
+        }
+
+    </style>
+    </head>
+<body>
+
+<h3>Yatay Navigasyon Bar Örneği</h3>
+<hr/>
+    <div role="menu">
+        <ul id="navbar" role="group">
+            <li role="menuitem"><a href="#">Gelen Kutusu</a></li>
+            <li role="menuitem"><a href="#">Gönderilenler</a></li>
+            <li role="menuitem"><a href="#">Favori Mesajlar</a></li>
+            <li role="menuitem"><a href="#">Silinen</a></li>
+            <li role="menuitem"><a href="#">Spam</a></li>
+        </ul>
+    </div>
+</body>
+</html>

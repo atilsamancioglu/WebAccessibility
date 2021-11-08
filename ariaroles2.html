@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		.div-table {
+		  display: table;         
+		  width: auto;         
+		  background-color: #eee;         
+		  border: 1px solid #666666;         
+		  border-spacing: 5px;
+		}
+		.div-table-row {
+		  display: table-row;
+		  width: auto;
+		  clear: both;
+		}
+		.div-table-col {
+		  float: left;
+		  display: table-column;         
+		  width: 200px;         
+		  background-color: #ccc;  
+		}
+	</style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+  <form id="form1">
+      <div class="div-table" role="grid">
+             <div class="div-table-row" role="row">
+                <div class="div-table-col" align="center" role="rowheader">Name</div>
+                <div  class="div-table-col" role="rowheader">Surname</div>
+                <div  class="div-table-col" role="rowheader">Email</div>
+             </div>
+            <div class="div-table-row" role="row">
+                  <div class="div-table-col" role="gridcell">Atil</div>
+                <div class="div-table-col"role="gridcell">Samancioglu</div>
+                <div class="div-table-col"role="gridcell">atil@example.com</div>
+            </div>
+            <div class="div-table-row" role="row">
+                <div class="div-table-col" role="gridcell">Osman</div>
+                <div class="div-table-col" role="gridcell">Yilmaz</div>
+                <div class="div-table-col" role="gridcell">osman@example.com</div>
+           </div>
+            <div class="div-table-row" role="row">
+                <div class="div-table-col" role="gridcell">Ayse</div>
+                <div class="div-table-col" role="gridcell">Surer</div>
+                <div class="div-table-col" role="gridcell">ayse@example.com</div>
+           </div>
+
+      </div>
+  </form>
+</body>
+</html>
