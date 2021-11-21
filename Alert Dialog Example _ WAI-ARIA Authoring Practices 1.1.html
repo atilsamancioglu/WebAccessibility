@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!-- saved from url=(0079)https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/alertdialog.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Alert Dialog Example | WAI-ARIA Authoring Practices 1.1</title>
+    <!--  Core js and css shared by all examples; do not modify when using this template. -->
+    <link rel="stylesheet" href="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/base.css">
+    <link rel="stylesheet" href="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/core.css">
+    <script src="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/examples.js"></script>
+    <script src="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/highlight.pack.js"></script>
+    <script src="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/app.js"></script>
+    <!-- js from the dialog-modal example -->
+    <script src="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/utils.js"></script>
+    <script src="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/dialog.js"></script>
+    <!--  js and css for this example. -->
+    <link href="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/dialog.css" rel="stylesheet">
+    <script src="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/alertdialog.js"></script>
+  </head>
+
+  <body>
+    <nav aria-label="Related Links" class="feedback">
+      <ul>
+        <li><a href="https://www.w3.org/TR/wai-aria-practices/#browser_and_AT_support">Browser and Assistive Technology Support</a></li>
+        <li><a href="https://github.com/w3c/aria-practices/issues/new">Report Issue</a></li>
+        <li><a href="https://github.com/w3c/aria-practices/projects/20">Related Issues</a></li>
+        <li><a href="https://www.w3.org/TR/wai-aria-practices/#alertdialog">Design Pattern</a></li>
+      </ul>
+    </nav>
+    <main>
+      <h1>Alert Dialog Example</h1>
+      <p>
+        The below example of a confirmation prompt demonstrates the <a href="https://www.w3.org/TR/wai-aria-practices/#alertdialog">design pattern for an alert dialog</a>.
+        It also includes an example of the <a href="https://www.w3.org/TR/wai-aria-practices/#alert">design pattern for an alert</a> to make comparing the experiences provided by the two patterns easy.
+      </p>
+      <p>To use this example:</p>
+      <ul>
+        <li>
+          Activate the "discard" button to trigger a confirmation dialog.
+          <ul>
+            <li>Activating the "yes" button removes the contents of both the "Notes" text area and local storage of the notes.</li>
+            <li>Activating the "no" button or pressing <kbd>escape</kbd> closes the dialog.</li>
+            <li>The "discard" button is disabled if the notes text area does not contain any text.</li>
+          </ul>
+        </li>
+        <li>
+          Activate the "save" button to trigger an alert when it saves the contents of the "Notes" text area to <a href="https://www.w3.org/TR/webstorage/#the-localstorage-attribute">local storage</a>.
+          <ul>
+            <li>A successful save triggers a short alert to notify the user that the notes have been saved.</li>
+            <li>The "save" button is disabled if the user's local storage value is the same as the "Notes" field.</li>
+          </ul>
+        </li>
+        <li>Modify the "notes" text area as needed to enable and disable the discard and save functions.</li>
+      </ul>
+      <p>
+          Note: This example uses code from the <a href="https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/dialog.html">modal dialog example</a> to create the behaviors of the <code>alertdialog</code> so referencing that example may be useful.
+        </p>
+      <p>Similar examples include:</p>
+      <ul>
+        <li><a href="https://www.w3.org/TR/wai-aria-practices/examples/alert/alert.html">Alert</a>: a basic alert.</li>
+        <li><a href="https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/dialog.html">Modal Dialog Example</a>: An example demonstrating multiple layers of modal dialogs with both small and large amounts of content.</li>
+        <li><a href="https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/datepicker-dialog.html">Date Picker Dialog example</a>: Demonstrates a dialog containing a calendar grid for choosing a date.</li>
+      </ul>
+      <section>
+        <h2 id="ex_label">Example</h2>
+        <div role="separator" id="ex_start_sep" aria-labelledby="ex_start_sep ex_label" aria-label="Start of"></div>
+        <div id="ex_alertdialog">
+          <label for="notes">Notes</label>
+          <textarea class="notes" name="notes" id="notes" rows="7">This is an example text box, which unsurprisingly contains text. The user is given the option to save this text - which triggers a basic alert - or to discard the text - which triggers an alert dialog that prompts the user for confirmation.</textarea>
+          <button type="button" aria-controls="notes" id="notes_save">Save</button>
+          <button type="button" aria-controls="notes" id="notes_discard" onclick="openAlertDialog(&#39;alert_dialog&#39;, this)">Discard</button>
+          <div role="alert" id="alert_toast" class="toast hidden">Nothing to discard.</div>
+          <div class="dialog-backdrop no-scroll">
+            <div id="alert_dialog" role="alertdialog" aria-modal="true"aria-describedby="dialog_desc" class="hidden">
+              <h2 id="dialog_label" class="dialog_label">Confirmation</h2>
+              <div id="dialog_desc" class="dialog_desc">
+                <p>Are you sure you want to discard all of your notes?</p>
+              </div>
+              <div class="dialog_form_actions">
+                <button type="button" onclick="closeDialog(this)">No</button>
+                <button type="button" aria-controls="notes" id="notes_confirm" onclick="discardInput(this)">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div role="separator" id="ex_end_sep" aria-labelledby="ex_end_sep ex_label" aria-label="End of"></div>
+      </section>
+      <section>
+        <h2>Accessibility Features</h2>
+        <ol>
+          <li>The accessible label for the alert dialog is set to its heading ("Confirmation").</li>
+          <li>The dialog's prompt ("Are you sure...?") is referenced via <code>aria-describedby</code> to ensure that the user is immediately aware of the prompt.</li>
+          <li>
+            Focus is automatically set to the first focusable element inside the dialog, which is the "No" <code>button</code>.
+            This is the least destructive action, so focusing "No" helps prevent users from accidentally confirming the destructive "Discard" action, which cannot be undone.
+          </li>
+        </ol>
+      </section>
+      <section>
+        <h2 id="kbd_label">Keyboard Support</h2>
+        <table aria-labelledby="kbd_label" class="def">
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Function</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th><kbd>Tab</kbd></th>
+              <td>
+                <ul>
+                  <li>Moves focus to next focusable element inside the dialog.</li>
+                  <li>When focus is on the last focusable element in the dialog, moves focus to the first focusable element in the dialog.</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th><kbd>Shift + Tab</kbd></th>
+              <td>
+                <ul>
+                  <li>Moves focus to previous focusable element inside the dialog.</li>
+                  <li>When focus is on the first focusable element in the dialog, moves focus to the last focusable element in the dialog.</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th><kbd>Escape</kbd></th>
+              <td>Closes the dialog.</td>
+            </tr>
+            <tr>
+              <th><kbd>Command + S</kbd></th>
+              <td>(Mac only) Save the contents of the notes <code>textarea</code> when focused.</td>
+            </tr>
+            <tr>
+              <th><kbd>Control + S</kbd></th>
+              <td>(Windows only) Save the contents of the notes <code>textarea</code> when focused.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2 id="rps_label">Role, Property, State, and Tabindex  Attributes</h2>
+        <table aria-labelledby="rps_label" class="data attributes">
+          <thead>
+            <tr>
+              <th scope="col">Role</th>
+              <th scope="col">Attribute</th>
+              <th scope="col">Element</th>
+              <th scope="col">Usage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>alertdialog</code></th>
+              <td></td>
+              <td><code>div</code></td>
+              <td>
+                Identifies the element that serves as the alert dialog container.
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <th scope="row"><code>aria-labelledby=<q>IDREF</q></code></th>
+              <td><code>div</code></td>
+              <td>
+                Gives the alert dialog an accessible name by referring to the element that provides the alert dialog title.
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <th scope="row"><code>aria-describedby=<q>IDREF</q></code></th>
+              <td><code>div</code></td>
+              <td>
+                Gives the alert dialog an accessible description by referring to the alert dialog content that describes the primary message or purpose of the alert dialog.
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <th scope="row"><code>aria-modal=<q>true</q></code></th>
+              <td><code>div</code></td>
+              <td>
+                Tells assistive technologies that the windows underneath the current alert dialog are not available for interaction (inert).
+              </td>
+            </tr>
+              <tr>
+                <th scope="row"><code>alert</code></th>
+                <td></td>
+                <td><code>div</code></td>
+                <td>
+                  Identifies the element that serves as the alert notification.
+                </td>
+              </tr>
+          </tbody>
+        </table>
+        <h3>Notes on <code>aria-modal</code> and <code>aria-hidden</code></h3>
+        <ol>
+          <li>
+            The <code>aria-modal</code> property was introduced in ARIA 1.1.
+            As a new property, screen reader users may experience varying degrees of support for it.
+          </li>
+          <li>
+            Applying the <code>aria-modal</code> property to the <code>dialog</code> element
+            replaces the technique of using <code>aria-hidden</code> on the background for informing assistive technologies that content outside a dialog is inert.
+          </li>
+          <li>
+            In legacy dialog implementations where <code>aria-hidden</code> is used to make content outside a dialog inert for assistive technology users, it is important that:
+            <ol>
+              <li><code>aria-hidden</code> is set to <code>true</code> on each element containing a portion of the inert layer.</li>
+              <li>The dialog element is not a descendant of any element that has <code>aria-hidden</code> set to <code>true</code>.</li>
+            </ol>
+          </li>
+        </ol>
+      </section>
+      <section>
+        <h2 id="src_label">Javascript and CSS Source Code</h2>
+        <ul>
+          <li> CSS: <a href="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/dialog.css" type="text/css">dialog.css</a></li>
+          <li> Javascript: <a href="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/alertdialog.js" type="text/javascript">alertdialog.js</a>, <a href="./Alert Dialog Example _ WAI-ARIA Authoring Practices 1.1_files/dialog.js" type="text/javascript">dialog.js</a></li>
+        </ul>
+      </section>
+      <section>
+        <h2 id="sc1_label">HTML Source Code</h2>
+        <div role="separator" id="sc1_start_sep" aria-labelledby="sc1_start_sep sc1_label" aria-label="Start of"></div>
+        <pre><code id="sc1" class="sourcecode hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">label</span>&nbsp;<span class="hljs-attr">for</span>=<span class="hljs-string">"notes"</span>&gt;</span><br>&nbsp;&nbsp;Notes<br><span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">textarea</span>&nbsp;<span class="hljs-attr">class</span>=<span class="hljs-string">"notes"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">name</span>=<span class="hljs-string">"notes"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">id</span>=<span class="hljs-string">"notes"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">rows</span>=<span class="hljs-string">"7"</span>&gt;</span><br>&nbsp;&nbsp;This is an example text box, which unsurprisingly contains text. The user is given the option to save this text - which triggers a basic alert - or to discard the text - which triggers an alert dialog that prompts the user for confirmation.<br><span class="hljs-tag">&lt;/<span class="hljs-name">textarea</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">button</span>&nbsp;<span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">aria-controls</span>=<span class="hljs-string">"notes"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">id</span>=<span class="hljs-string">"notes_save"</span>&gt;</span><br>&nbsp;&nbsp;Save<br><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">button</span>&nbsp;<span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">aria-controls</span>=<span class="hljs-string">"notes"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">id</span>=<span class="hljs-string">"notes_discard"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">onclick</span>=<span class="hljs-string">"openAlertDialog('alert_dialog', this)"</span>&gt;</span><br>&nbsp;&nbsp;Discard<br><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&nbsp;<span class="hljs-attr">role</span>=<span class="hljs-string">"alert"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">id</span>=<span class="hljs-string">"alert_toast"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">class</span>=<span class="hljs-string">"toast hidden"</span>&gt;</span><br>&nbsp;&nbsp;Nothing to discard.<br><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&nbsp;<span class="hljs-attr">class</span>=<span class="hljs-string">"dialog-backdrop no-scroll"</span>&gt;</span><br>&nbsp;&nbsp;<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&nbsp;<span class="hljs-attr">id</span>=<span class="hljs-string">"alert_dialog"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">role</span>=<span class="hljs-string">"alertdialog"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">aria-modal</span>=<span class="hljs-string">"true"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">aria-labelledby</span>=<span class="hljs-string">"dialog_label"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">aria-describedby</span>=<span class="hljs-string">"dialog_desc"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">class</span>=<span class="hljs-string">"hidden"</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&nbsp;<span class="hljs-attr">id</span>=<span class="hljs-string">"dialog_label"</span>&nbsp;<span class="hljs-attr">class</span>=<span class="hljs-string">"dialog_label"</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&nbsp;<span class="hljs-attr">id</span>=<span class="hljs-string">"dialog_desc"</span>&nbsp;<span class="hljs-attr">class</span>=<span class="hljs-string">"dialog_desc"</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Are you sure you want to discard all of your notes?<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&nbsp;<span class="hljs-attr">class</span>=<span class="hljs-string">"dialog_form_actions"</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;<span class="hljs-name">button</span>&nbsp;<span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span>&nbsp;<span class="hljs-attr">onclick</span>=<span class="hljs-string">"closeDialog(this)"</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;<span class="hljs-name">button</span>&nbsp;<span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">aria-controls</span>=<span class="hljs-string">"notes"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">id</span>=<span class="hljs-string">"notes_confirm"</span></span><br><span class="hljs-tag">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-attr">onclick</span>=<span class="hljs-string">"discardInput(this)"</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>&nbsp;&nbsp;<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+        <div role="separator" id="sc1_end_sep" aria-labelledby="sc1_end_sep sc1_label" aria-label="End of"></div>
+        <script>
+          sourceCode.add('sc1', 'ex_alertdialog');
+          sourceCode.make();
+        </script>
+      </section>
+    </main>
+    <nav>
+      <a href="https://www.w3.org/TR/wai-aria-practices/#alertdialog">Alert and Message Dialogs Design Pattern in WAI-ARIA Authoring Practices 1.1</a>
+    </nav>
+  
+
+</body></html>
